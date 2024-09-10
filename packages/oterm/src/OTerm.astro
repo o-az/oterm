@@ -1,0 +1,144 @@
+---
+import '@xterm/xterm/css/xterm.css'
+
+interface Props {}
+---
+
+<textarea
+  required={true}
+  readonly={false}
+  autocorrect="off"
+  autocomplete="off"
+  spellcheck="false"
+  id="terminal-input"
+  autocapitalize="none"
+  class="focus:ring-0 focus-visible:ring-0 outline-none"
+>
+  loading...
+</textarea>
+<div
+  class="terminal-container px-3 bg-[rgb(22_24_29)] border border-solid border-[#221e2b] rounded-md my-0"
+>
+  <div id="terminal" data-terminal="" class="" class="size-full bg-[rgb(22_24_29)]"></div>
+</div>
+<iframe class="hidden" allow="cross-origin-isolated"></iframe>
+
+<script>
+  import { oTerm, type OTerm } from '#xterm.ts'
+  import { WebContainer, type FileSystemTree, type WebContainerProcess } from '@webcontainer/api'
+
+  const files = {
+    'mod.ts': {
+      file: {
+        contents: /* ts */ `console.info('hello world')`,
+      },
+    },
+    'package.json': {
+      file: {
+        contents: /* json */ `
+          {
+            "name": "demo",
+            "type": "module",
+            "dependencies": {
+              "tsx": "latest",
+              "viem": "latest"
+            }
+          }
+        `.trim(),
+      },
+    },
+  } satisfies FileSystemTree
+
+  type FileName = keyof typeof files
+
+  const writeToWebContainerFile = async ({
+    path,
+    content,
+  }: {
+    path: FileName
+    content: string
+  }) => {
+    await webcontainerInstance.fs.writeFile(path, content)
+  }
+
+  async function installDependencies() {
+    // Install dependencies
+    const promises = [
+      webcontainerInstance.spawn('npm', ['install', '--global', 'bun']).catch(() => {}),
+      webcontainerInstance.spawn('npm', ['install']).catch(() => {}),
+    ] as Array<Promise<WebContainerProcess>>
+    const installProcesses = await Promise.all(promises)
+    return installProcesses.map(installProcess => {
+      installProcess.output.pipeTo(
+        new WritableStream({
+          write: data => {
+            console.log(data)
+          },
+        }),
+      )
+      // Wait for install command to exit
+      return installProcess.exit
+    })
+  }
+
+  async function startShell(terminal: OTerm) {
+    const shellProcess = await webcontainerInstance.spawn('bash', {
+      env: {},
+      terminal: { cols: terminal.cols, rows: terminal.rows },
+    })
+    shellProcess.output.pipeTo(
+      new WritableStream({
+        write: data => {
+          terminal.write(data)
+        },
+      }),
+    )
+
+    const input = shellProcess.input.getWriter()
+    terminal.onData(data => {
+      input.write(data)
+    })
+
+    return shellProcess
+  }
+
+  let webcontainerInstance: WebContainer
+
+  window.addEventListener('load', async () => {
+    if (!textareaElement || !terminalElement || !iframeElement) return
+
+    textareaElement.value = files['mod.ts'].file.contents
+    textareaElement.addEventListener('input', event => {
+      if (!event.target?.value) return
+      writeToWebContainerFile({ path: 'mod.ts', content: event.target.value })
+    })
+
+    const {
+      terminal,
+      addons: { fitAddon },
+    } = await oTerm(terminalElement)
+
+    webcontainerInstance = await WebContainer.boot({
+      workdirName: 'oterm',
+      forwardPreviewErrors: true,
+    })
+
+    await webcontainerInstance.mount(files)
+
+    const shellProcess = await startShell(terminal)
+    await installDependencies()
+    window.addEventListener('resize', () => {
+      fitAddon.fit()
+      shellProcess.resize({ cols: terminal.cols, rows: terminal.rows })
+    })
+
+    const xtermViewport = document.querySelector('div.xterm-viewport')
+    if (!xtermViewport) return
+  })
+
+  const iframeElement = document.querySelector('iframe')
+  const textareaElement = document.querySelector('textarea')
+  const terminalElement = document.querySelector('div#terminal')
+</script>
+
+<style></style>

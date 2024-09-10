@@ -1,0 +1,28 @@
+{
+  "name": "root",
+  "type": "module",
+  "private": true,
+  "packageManager": "pnpm@9.9.0",
+  "scripts": {
+    "build": "pnpm --recursive build",
+    "typecheck": "pnpm --recursive typecheck",
+    "format": "/bin/sh ./scripts/biome.sh format . --log-level='info' --log-kind='pretty' --error-on-warnings --diagnostic-level='info' --write",
+    "lint": "/bin/sh ./scripts/biome.sh lint . --error-on-warnings --colors='force' --log-level='info' --log-kind='pretty' --diagnostic-level='info' --apply-unsafe",
+    "clean": "/bin/sh ./scripts/clean.sh"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.8.3",
+    "@total-typescript/ts-reset": "^0.6.1",
+    "@types/bun": "^1.1.9",
+    "@types/node": "^22.5.4",
+    "tsx": "^4.19.0",
+    "typescript": "^5.1.2"
+  },
+  "pnpm": {
+    "overrides": {
+      "isarray": "npm:@nolyfill/isarray@^1",
+      "side-channel": "npm:@nolyfill/side-channel@^1",
+      "is-core-module": "npm:@nolyfill/is-core-module@^1"
+    }
+  }
+}
