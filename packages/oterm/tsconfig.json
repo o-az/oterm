@@ -32,5 +32,5 @@
     "types": ["node", "bun", "typed-query-selector/strict"]
   },
   "include": ["src", "scripts"],
-  "files": ["reset.d.ts", "env.d.ts"]
+  "files": ["reset.d.ts"]
 }
