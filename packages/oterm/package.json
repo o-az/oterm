@@ -6,7 +6,11 @@
     ".": "./src/index.ts",
     "./package.json": "./package.json"
   },
-  "files": ["./src/*.ts", "./src/OTerm.astro", "./package.json"],
+  "files": [
+    "./src/*.ts",
+    "./src/OTerm.astro",
+    "./package.json"
+  ],
   "scripts": {
     "start": "node --import=tsx ./src/index.ts",
     "typecheck": "astro check"
