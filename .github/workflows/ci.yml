@@ -13,6 +13,8 @@ defaults:
 
 env:
   ACTIONS_RUNNER_DEBUG: true
+  NODE_OPTIONS: '--no-warnings'
+  ASTRO_TELEMETRY_DISABLED: true
 
 jobs:
   checks:
@@ -37,16 +39,17 @@ jobs:
       - name: 'Setup Node.js'
         uses: actions/setup-node@v4
         with:
-          node-version: 'lts/*'
           cache: 'pnpm'
+          node-version: 'lts/*'
 
       - name: 'Install Dependencies'
         run: pnpm install
 
+      - name: 'Format'
+        run: pnpm dlx @biomejs/biome format . --reporter=github
+
       - name: 'Lint'
-        run: |
-          pnpm format
-          pnpm lint
+        run: pnpm dlx @biomejs/biome lint . --reporter=github
 
       - name: 'Type Check'
         run: pnpm typecheck

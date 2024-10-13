@@ -6,8 +6,8 @@
   "scripts": {
     "build": "pnpm --recursive build",
     "typecheck": "pnpm --recursive typecheck",
-    "format": "/bin/sh ./scripts/biome.sh format . --log-level='info' --log-kind='pretty' --error-on-warnings --diagnostic-level='info' --write",
-    "lint": "/bin/sh ./scripts/biome.sh lint . --error-on-warnings --colors='force' --log-level='info' --log-kind='pretty' --diagnostic-level='info' --apply-unsafe",
+    "format": "/bin/sh ./scripts/biome.sh format . --log-kind='pretty' --error-on-warnings --write",
+    "lint": "/bin/sh ./scripts/biome.sh lint . --error-on-warnings --log-kind='pretty' --unsafe",
     "clean": "/bin/sh ./scripts/clean.sh"
   },
   "devDependencies": {

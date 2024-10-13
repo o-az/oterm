@@ -7,14 +7,38 @@
   },
   "organizeImports": {
     "enabled": false,
-    "include": ["*.ts", "*.json", "*.jsonc"],
-    "ignore": ["_"]
+    "include": [
+      "*.js",
+      "*.cjs",
+      "*.mjs",
+      "*.ts",
+      "*.cts",
+      "*.mts",
+      "*.d.ts",
+      "*.d.cts",
+      "*.d.mts",
+      "*.css"
+    ],
+    "ignore": ["_", ".astro", "node_modules"]
   },
   "files": {
     "maxSize": 3048576,
     "ignoreUnknown": true,
-    "include": ["**/*.ts", "*.ts", "*.json", "*.jsonc"],
-    "ignore": ["_"]
+    "include": [
+      "*.js",
+      "*.cjs",
+      "*.mjs",
+      "*.ts",
+      "*.cts",
+      "*.mts",
+      "*.d.ts",
+      "*.d.cts",
+      "*.d.mts",
+      "*.json",
+      "*.jsonc",
+      "*.css"
+    ],
+    "ignore": ["_", ".astro", "node_modules"]
   },
   "json": {
     "linter": {
@@ -55,8 +79,21 @@
     "indentStyle": "space",
     "formatWithErrors": true,
     "attributePosition": "auto",
-    "include": ["*.ts", "**/*.ts", "*.json", "*.jsonc", "./apps/api/nitro.config.ts"],
-    "ignore": ["_"]
+    "include": [
+      "*.js",
+      "*.cjs",
+      "*.mjs",
+      "*.ts",
+      "*.cts",
+      "*.mts",
+      "*.d.ts",
+      "*.d.cts",
+      "*.d.mts",
+      "*.json",
+      "*.jsonc",
+      "*.css"
+    ],
+    "ignore": ["_", ".astro", "node_modules"]
   },
   "linter": {
     "enabled": true,
@@ -95,7 +132,20 @@
         }
       }
     },
-    "include": ["*.ts", "*.json", "*.jsonc", "apps/**/*.ts"],
-    "ignore": ["_"]
+    "include": [
+      "*.js",
+      "*.cjs",
+      "*.mjs",
+      "*.ts",
+      "*.cts",
+      "*.mts",
+      "*.d.ts",
+      "*.d.cts",
+      "*.d.mts",
+      "*.json",
+      "*.jsonc",
+      "*.css"
+    ],
+    "ignore": ["_", ".astro", "node_modules"]
   }
 }
