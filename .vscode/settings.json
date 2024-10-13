@@ -17,6 +17,16 @@
   "yaml.schemas": {
     "config/cloudflared-schema.json": ".cloudflared/config.yml"
   },
+  "files.associations": {
+    ".envrc": "dotenv",
+    "*.css": "tailwindcss"
+  },
+  "editor.quickSuggestions": {
+    "strings": "on"
+  },
+  "tailwindCSS.includeLanguages": {
+    "plaintext": "html"
+  },
   "search.exclude": {
     "**/_/**": true,
     "**/dist/**": true,
@@ -28,8 +38,5 @@
     "**/*._*": true,
     "**/.secret/**": true,
     "**/.cloudflared/**": true
-  },
-  "files.associations": {
-    ".envrc": "dotenv"
   }
 }

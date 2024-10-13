@@ -1,7 +1,6 @@
 import { xTermTheme } from '#theme.ts'
 import { FitAddon } from '@xterm/addon-fit'
 import { ImageAddon } from '@xterm/addon-image'
-import { WebglAddon } from '@xterm/addon-webgl'
 import { Terminal as XTerm } from '@xterm/xterm'
 import { WebLinksAddon } from '@xterm/addon-web-links'
 import { ClipboardAddon } from '@xterm/addon-clipboard'
@@ -9,7 +8,6 @@ import { SerializeAddon } from '@xterm/addon-serialize'
 
 export type XTermAddon = {
   fitAddon: FitAddon
-  webglAddon: WebglAddon
   imageAddon: ImageAddon
   webLinksAddon: WebLinksAddon
   clipboardAddon: ClipboardAddon
@@ -27,7 +25,7 @@ export async function oTerm(
   addons: XTermAddon
 }> {
   const terminal = new XTerm({
-    fontSize: 15,
+    fontSize: 16,
     convertEol: true,
     cursorBlink: true,
     theme: xTermTheme,
@@ -36,14 +34,10 @@ export async function oTerm(
     cursorInactiveStyle: 'bar',
     disableStdin: options.readonly,
     drawBoldTextInBrightColors: true,
-    fontFamily: 'JetBrains Mono, monospace'
+    fontFamily: 'Menlo, Monaco, "Courier New", monospace'
   })
   const fitAddon = new FitAddon()
   terminal.loadAddon(fitAddon)
-
-  const webglAddon = new WebglAddon()
-  webglAddon.onContextLoss(_event => webglAddon.dispose())
-  terminal.loadAddon(webglAddon)
 
   const serializeAddon = new SerializeAddon()
   terminal.loadAddon(serializeAddon)
@@ -63,7 +57,6 @@ export async function oTerm(
     terminal,
     addons: {
       fitAddon,
-      webglAddon,
       imageAddon,
       webLinksAddon,
       clipboardAddon,

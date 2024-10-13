@@ -11,17 +11,11 @@ interface Props {}
   autocomplete="off"
   spellcheck="false"
   id="terminal-input"
-  autocapitalize="none"
-  class="focus:ring-0 focus-visible:ring-0 outline-none"
->
-  loading...
-</textarea>
-<div
-  class="terminal-container px-3 bg-[rgb(22_24_29)] border border-solid border-[#221e2b] rounded-md my-0"
->
-  <div id="terminal" data-terminal="" class="" class="size-full bg-[rgb(22_24_29)]"></div>
+  autocapitalize="none"></textarea>
+<div id="terminal-container">
+  <div id="terminal" data-terminal="" class="" class=""></div>
 </div>
-<iframe class="hidden" allow="cross-origin-isolated"></iframe>
+<iframe class="hidden" id="terminal-iframe" allow="cross-origin-isolated"></iframe>
 
 <script>
   import { oTerm, type OTerm } from '#xterm.ts'
@@ -64,15 +58,15 @@ interface Props {}
   async function installDependencies() {
     // Install dependencies
     const promises = [
-      webcontainerInstance.spawn('npm', ['install', '--global', 'bun']).catch(() => {}),
-      webcontainerInstance.spawn('npm', ['install']).catch(() => {}),
+      // webcontainerInstance.spawn('npm', ['install', '--global', 'bun']).catch(() => {}),
+      // webcontainerInstance.spawn('npm', ['install']).catch(() => {}),
     ] as Array<Promise<WebContainerProcess>>
     const installProcesses = await Promise.all(promises)
     return installProcesses.map(installProcess => {
       installProcess.output.pipeTo(
         new WritableStream({
           write: data => {
-            console.log(data)
+            // console.log(data)
           },
         }),
       )
@@ -141,4 +135,76 @@ interface Props {}
   const terminalElement = document.querySelector('div#terminal')
 </script>
 
-<style></style>
+<style is:global>
+  .xterm-rows {
+    padding-left: 10px !important;
+  }
+
+  .xterm {
+    --at-apply: h-full;
+    --at-apply: p-3;
+  }
+  .xterm .xterm-viewport {
+    background-color: #03030303 !important;
+
+    --at-apply: transition-theme;
+  }
+
+  div#terminal-container {
+    /* display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; */
+
+    /* inset: 1em; */
+    border-width: 1px;
+    border-style: solid;
+    border-color: #1dd535;
+    border-radius: 0.375rem;
+    background-color: rgb(22, 24, 29);
+
+    width: 800px;
+    height: 400px;
+
+    text-align: left;
+  }
+
+  div#terminal {
+    width: 100%;
+    height: 100%;
+    padding-top: 12px;
+
+    /* background-color: rgb(22, 24, 29); */
+  }
+
+  textarea#terminal-input {
+    width: 0%;
+    height: 0%;
+    display: none;
+    outline: none;
+    color: transparent;
+    background: transparent;
+  }
+
+  iframe#terminal-iframe {
+    width: 0;
+    height: 0;
+    display: none;
+  }
+
+  canvas,
+  .xterm-decoration-container {
+    margin-top: 0 !important;
+  }
+  .xterm,
+  canvas,
+  .composition-view,
+  .xterm-helpers,
+  .xterm-helper-textarea,
+  textarea,
+  .terminal,
+  .terminal-wrapper,
+  .xterm-viewport {
+    border-radius: calc(var(--ec-brdRad) + var(--ec-brdWd));
+  }
+</style>
